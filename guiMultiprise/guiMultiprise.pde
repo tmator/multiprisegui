@@ -11,6 +11,8 @@ ImageButtons buttonj;
 ImageButtons buttonk;
 ImageButtons buttonl;
 
+SimpleThread printThread;
+
 boolean firstpress=false;
 int onetime=0;
 
@@ -19,6 +21,9 @@ void setup()
 {
   size(800,600);;
   background(102, 102, 102);
+  
+  printThread = new SimpleThread(1000,"a");
+  printThread.start();
   
   //12img a -> l
   
@@ -224,22 +229,9 @@ class ImageButtons extends Button
       {
         if (onetime==0)
         {
-            try {
-              String[] command = new String[2];
-              command[0]="C:/IrfanView/i_view32.exe";
-              command[1]="C:\\BMP\\"+idimg+".bmp /print";  
-              //println("presse "+command[1]);
-            
-              Process p = exec(command);
-              BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-              String line = null;
-              while ((line = in.readLine()) != null) {
-                System.out.println(line);
-              }//fin while
-            }// fin try
-            catch (IOException e) { // gestion exception
-              e.printStackTrace();
-            } // fin catch 
+              println("print "+idimg);
+              printThread.printImg(idimg);
+              
              onetime++;
         }
       }
